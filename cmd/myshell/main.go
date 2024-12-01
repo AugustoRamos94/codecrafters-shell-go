@@ -22,23 +22,25 @@ func main() {
 		input, _ := reader.ReadString('\n')
 		input = strings.TrimSpace(input)
 
-		commands := strings.Split(input, " ")
+		args := strings.Split(input, " ")
+		cmd := args[0]
+		args = args[1:]
 
-		switch commands[0] {
+		switch cmd {
 		case "exit":
 			os.Exit(0)
 		case "echo":
-			fmt.Println(strings.Join(commands[1:], " "))
+			fmt.Println(strings.Join(args[:], " "))
 		case "type":
-			_, ok := commandsMapping[commands[1]]
+			_, ok := commandsMapping[args[0]]
 			if !ok {
-				fmt.Println(commands[1] + ": not found")
+				fmt.Println(args[0] + ": not found")
 				continue
 			}
 
-			fmt.Println(commands[1] + " is a shell builtin")
+			fmt.Println(args[0] + " is a shell builtin")
 		default:
-			fmt.Println(commands[0] + ": command not found")
+			fmt.Println(cmd + ": command not found")
 		}
 	}
 }
