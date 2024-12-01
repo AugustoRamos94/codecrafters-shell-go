@@ -13,14 +13,18 @@ func main() {
 
 	for {
 		fmt.Fprint(os.Stdout, "$ ")
-		command, _ := reader.ReadString('\n')
-		command = strings.TrimSpace(command)
+		input, _ := reader.ReadString('\n')
+		input = strings.TrimSpace(input)
 
-		switch command {
-		case "exit 0":
+		commands := strings.Split(input, " ")
+
+		switch commands[0] {
+		case "exit":
 			os.Exit(0)
+		case "echo":
+			fmt.Println(strings.Join(commands[1:], " "))
 		default:
-			fmt.Println(command + ": command not found")
+			fmt.Println(commands[0] + ": command not found")
 		}
 	}
 }
