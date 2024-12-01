@@ -21,5 +21,5 @@ func main() {
 		return
 	}
 
-	fmt.Printf("%s: command not found\n", command[:len(command)-1])
+	fmt.Println(command[:len(command)-1] + ": command not found")
 }
