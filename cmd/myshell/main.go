@@ -55,10 +55,10 @@ func handleCommand(cmd string, args []string) {
 
 		fmt.Println(args[0] + ": not found")
 	default:
-		command := exec.Command(cmd, args...)
-		command.Stderr = os.Stderr
-		command.Stdout = os.Stdout
-		err := command.Run()
+		externalCommand := exec.Command(cmd, args...)
+		externalCommand.Stderr = os.Stderr
+		externalCommand.Stdout = os.Stdout
+		err := externalCommand.Run()
 		if err != nil {
 			fmt.Printf("%s: command not found\n", cmd)
 		}
