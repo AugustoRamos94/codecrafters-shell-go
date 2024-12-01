@@ -13,6 +13,7 @@ var commandsMapping = map[string]bool{
 	"exit": true,
 	"echo": true,
 	"type": true,
+	"pwd":  true,
 }
 
 func main() {
@@ -54,6 +55,9 @@ func handleCommand(cmd string, args []string) {
 		}
 
 		fmt.Println(args[0] + ": not found")
+	case "pwd":
+		pwd, _ := os.Getwd()
+		fmt.Println(pwd)
 	default:
 		externalCommand := exec.Command(cmd, args...)
 		externalCommand.Stderr = os.Stderr
