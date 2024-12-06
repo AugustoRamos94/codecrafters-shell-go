@@ -14,6 +14,7 @@ var commandsMapping = map[string]bool{
 	"echo": true,
 	"type": true,
 	"pwd":  true,
+	"cd":   true,
 }
 
 func main() {
@@ -35,29 +36,15 @@ func main() {
 func handleCommand(cmd string, args []string) {
 	switch cmd {
 	case "exit":
-		os.Exit(0)
+		exit()
 	case "echo":
-		fmt.Println(strings.Join(args[:], " "))
+		echo(args)
 	case "type":
-		_, ok := commandsMapping[args[0]]
-		if ok {
-			fmt.Println(args[0] + " is a shell builtin")
-			return
-		}
-
-		paths := strings.Split(os.Getenv("PATH"), ":")
-		for _, path := range paths {
-			fp := filepath.Join(path, args[0])
-			if _, err := os.Stat(fp); err == nil {
-				fmt.Println(fp)
-				return
-			}
-		}
-
-		fmt.Println(args[0] + ": not found")
+		_type(args)
 	case "pwd":
-		pwd, _ := os.Getwd()
-		fmt.Println(pwd)
+		pwd()
+	case "cd":
+		cd(cmd, args)
 	default:
 		externalCommand := exec.Command(cmd, args...)
 		externalCommand.Stderr = os.Stderr
@@ -66,5 +53,41 @@ func handleCommand(cmd string, args []string) {
 		if err != nil {
 			fmt.Printf("%s: command not found\n", cmd)
 		}
+	}
+}
+
+func exit() { os.Exit(0) }
+
+func echo(args []string) {
+	fmt.Println(strings.Join(args[:], " "))
+}
+
+func _type(args []string) {
+	_, ok := commandsMapping[args[0]]
+	if ok {
+		fmt.Println(args[0] + " is a shell builtin")
+		return
+	}
+
+	paths := strings.Split(os.Getenv("PATH"), ":")
+	for _, path := range paths {
+		fp := filepath.Join(path, args[0])
+		if _, err := os.Stat(fp); err == nil {
+			fmt.Println(fp)
+			return
+		}
+	}
+
+	fmt.Println(args[0] + ": not found")
+}
+
+func pwd() {
+	pwd, _ := os.Getwd()
+	fmt.Println(pwd)
+}
+
+func cd(cmd string, args []string) {
+	if err := os.Chdir(args[0]); err != nil {
+		fmt.Printf("%s: %s: No such file or directory\n", cmd, args[0])
 	}
 }
