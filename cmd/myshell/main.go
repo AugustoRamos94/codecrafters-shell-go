@@ -13,9 +13,9 @@ func main() {
 	for {
 		fmt.Fprint(os.Stdout, "$ ")
 		input, _ := reader.ReadString('\n')
-		input = strings.TrimSpace(input)
+		input = strings.Trim(input, "\n")
 
-		args := strings.Split(input, " ")
+		args := parseCommand(input)
 		cmd := args[0]
 		args = args[1:]
 

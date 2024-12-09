@@ -15,6 +15,7 @@ var builtInCommands = map[string]bool{
 	"type": true,
 	"pwd":  true,
 	"cd":   true,
+	// "cat":  true,
 }
 
 func handleCommand(cmd string, args []string) {
@@ -29,6 +30,8 @@ func handleCommand(cmd string, args []string) {
 		pwd()
 	case "cd":
 		cd(cmd, args)
+	// case "cat":
+	// 	cat(args)
 	default:
 		externalCommand := exec.Command(cmd, args...)
 		externalCommand.Stderr = os.Stderr
@@ -84,3 +87,20 @@ func cd(cmd string, args []string) {
 		fmt.Printf("%s: %s: No such file or directory\n", cmd, dirname)
 	}
 }
+
+// func cat(args []string) {
+// 	for _, fileName := range args {
+// 		file, _ := os.Open(fileName)
+// 		fmt.Fprint(os.Stdout, "filename: ", fileName)
+// 		defer file.Close()
+
+// 		r := bufio.NewReader(file)
+
+// 		for {
+// 			line, _, _ := r.ReadLine()
+// 			if len(line) > 0 {
+// 				fmt.Fprint(os.Stdout, "%q", line)
+// 			}
+// 		}
+// 	}
+// }
